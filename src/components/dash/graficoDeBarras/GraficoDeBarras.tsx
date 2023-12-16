@@ -81,7 +81,7 @@ function GraficoDeBarras({
         options={chartOptions.options}
         series={chartOptions.series}
         type="bar"
-        width={430}
+        width={300}
         height={250}
       />
     </div>

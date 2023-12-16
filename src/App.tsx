@@ -10,21 +10,23 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className='mt-4 m-12'>
+
         <a href="https://rhede.serviceup.app/portal/index.html" target="_blank"
           className="underline-none text-3xl font-bold hover:underline-none text-green-900">
-          <h1>Suporte i9</h1>
+          <h1>{import.meta.env.VITE_SETOR}</h1>
         </a>
 
-        <div className='mt-4 p-4 shadow-md bg-primary'>
-          <GraficoDeBarras
-            analistas={dummyData.analistas}
-            ticketsResolvidos={dummyData.ticketsResolvidos}
-            ticketsFechados={dummyData.ticketsFechados}
-          />
-        </div>
-
       </div>
+
+      <div className='mt-auto m-4 bg-primary'>
+        <GraficoDeBarras
+          analistas={dummyData.analistas}
+          ticketsResolvidos={dummyData.ticketsResolvidos}
+          ticketsFechados={dummyData.ticketsFechados}
+        />
+      </div>
+
     </>
   );
 }
