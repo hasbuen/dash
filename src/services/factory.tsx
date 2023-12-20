@@ -1,3 +1,5 @@
+import formatarNomes from "../util/strings/formatarNomes";
+
 async function createFactory() {
   const API = import.meta.env.VITE_API;
 
@@ -35,28 +37,86 @@ async function createFactory() {
       return tickets.filter(ticket => owners.includes(ticket.Owner.toLowerCase()));
     }
 
-    processOwners(tickets: any) {
+    processOwners(tickets: any, ignorarAnalista: string[]) {
       const ownersSummary: { [key: string]: any; } = {};
 
       Object.values(tickets).forEach((ticket: any) => {
-        const key = ticket.Owner.toLowerCase();
-        if (!ownersSummary[key]) {
-          ownersSummary[key] = {
-            Owner: ticket.Owner,
-            Resolvido: 0,
-            Fechado: 0
-          };
-        }
+        const key = ticket.Owner;
 
-        if (ticket.State.toLowerCase() === 'resolvido') {
-          ownersSummary[key].Resolvido++;
-        } else if (ticket.State.toLowerCase() === 'fechado') {
-          ownersSummary[key].Fechado++;
+        // Ignorar analistas na lista
+        if (!ignorarAnalista.includes(key.toLowerCase())) {
+          if (!ownersSummary[key]) {
+            ownersSummary[key] = {
+              Owner: formatarNomes(ticket.Owner),
+              Resolvido: 0,
+              Fechado: 0
+            };
+          }
+
+          if (ticket.State.toLowerCase() === 'resolvido') {
+            ownersSummary[key].Resolvido++;
+          } else if (ticket.State.toLowerCase() === 'fechado') {
+            ownersSummary[key].Fechado++;
+          }
         }
       });
 
+
       return Object.values(ownersSummary);
     }
+
+
+    devolverApenasTotalDeTicketsResolvidos(tickets: any[], ignorarAnalista: string[]): number {
+      let resolvidos = 0;
+
+      tickets.forEach((ticket: any) => {
+
+        if (!ignorarAnalista.includes(ticket.Owner.toLowerCase())) {
+
+          if (ticket.State.toLowerCase() === 'resolvido') {
+            resolvidos++;
+          }
+        }
+      });
+
+      return resolvidos;
+
+    }
+
+    devolverApenasTotalDeTicketsFechados(tickets: any[], ignorarAnalista: string[]): number {
+      let fechados = 0;
+
+      tickets.forEach((ticket: any) => {
+
+        if (!ignorarAnalista.includes(ticket.Owner.toLowerCase())) {
+
+          if (ticket.State.toLowerCase() === 'fechado') {
+            fechados++;
+          }
+        }
+      });
+
+      return fechados;
+
+    }
+
+    devolverApenasTotalDeTicketsAbertos(tickets: any[], ignorarAnalista: string[]): number {
+      let abertos = 0;
+
+      tickets.forEach((ticket: any) => {
+
+        if (!ignorarAnalista.includes(ticket.Owner.toLowerCase())) {
+
+          if (ticket.State.toLowerCase() === 'novo' || ticket.State.toLowerCase() === 'open') {
+            abertos++;
+          }
+        }
+      });
+
+      return abertos;
+
+    }
+    
 
 
   }

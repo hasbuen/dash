@@ -1,5 +1,6 @@
 import Chart from 'react-apexcharts';
 import { useGraphData } from './hooks/useGraphData';
+import { Flex, Text, useColorMode } from '@chakra-ui/react';
 
 interface IGraph {
   analistas: string[];
@@ -7,7 +8,7 @@ interface IGraph {
   ticketsFechados: number[];
 }
 
-function GraficoDeBarras({
+function Bar({
   analistas: getAnalistas = [],
   ticketsResolvidos: getTicketsResolvidos = [],
   ticketsFechados: getTicketsFechados = []
@@ -18,22 +19,21 @@ function GraficoDeBarras({
     getTicketsFechados
   );
 
+  const { colorMode } = useColorMode();
+
   const chartOptions: any = {
     series: [
-      { name: 'Resolvidos', data: ticketsResolvidos },
-      { name: 'Fechados', data: ticketsFechados },
+      { 
+        name: 'Resolvidos', data: ticketsResolvidos, color: colorMode === 'light' ? '#8000ff' : '#ffff00' },
+      { name: 'Fechados', data: ticketsFechados, color: colorMode === 'light' ? '#000' : '#00ff40' },
     ],
     options: {
       chart: {
         type: 'bar',
-        width: 400,
-        height: 250,
-      },
-      title: {
-        text: 'Fechados e resolvidos (HOJE)',
-        align: 'center',
-        style: {
-          fontSize: '12px',
+        width: 300,
+        height: 220,
+        toolbar: {
+          show: true
         },
       },
       plotOptions: {
@@ -46,10 +46,6 @@ function GraficoDeBarras({
       },
       dataLabels: {
         enabled: false,
-        style: {
-          fontSize: '12px',
-          colors: ['#fff'],
-        },
       },
       stroke: {
         show: false,
@@ -65,6 +61,9 @@ function GraficoDeBarras({
             val = ' ';
             return val;
           },
+          style: {
+            color: colorMode === 'light' ? 'black' : 'white',
+          },
         },
       },
       yaxis: {
@@ -72,20 +71,30 @@ function GraficoDeBarras({
           text: undefined,
         },
       },
+      theme: {
+        mode: colorMode,
+      },
     },
   };
-
+  
+  if (colorMode === 'dark') {
+    chartOptions.options.xaxis.labels.style.color = 'white'; 
+  };
+  
   return (
-    <div className='basic-bar'>
+    <Flex alignItems='center' direction='column'>
+      <Text color={colorMode === 'light' ? 'black' : 'white'}>
+        Resolvidos e Fechados
+      </Text>
       <Chart
         options={chartOptions.options}
         series={chartOptions.series}
         type="bar"
         width={300}
-        height={250}
+        height={220}
       />
-    </div>
+    </Flex>
   );
 }
 
-export default GraficoDeBarras;
+export default Bar;

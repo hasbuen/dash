@@ -1,1 +1,1 @@
-select * from tickets;
+delete from tickets;
