@@ -1,7 +1,7 @@
-
-VITE_HOST=https://yourhost
-VITE_USER=yourUser
-VITE_PASS=yourPass
+##### :pushpin:Variáveis
+- VITE_HOST=https://yourhost
+- VITE_USER=yourUser
+- VITE_PASS=yourPass
 
 - Configure the top-level `parserOptions` property like this:
 
